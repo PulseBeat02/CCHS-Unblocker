@@ -2,6 +2,7 @@ package io.github.pulsebeat02.cchsunblocker.plist.safety;
 
 import io.github.pulsebeat02.cchsunblocker.PreferenceFileLocale;
 import java.io.IOException;
+import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -14,6 +15,7 @@ public final class BackupTask {
   public BackupTask() throws IOException {
     backup = PreferenceFileLocale.BACKUP_PATH;
     createFolder();
+    copyFiles();
   }
 
   private void createFolder() throws IOException {
@@ -23,7 +25,15 @@ public final class BackupTask {
   }
 
   private void copyFiles() throws IOException {
-    copyFolder(PreferenceFileLocale.BASE_PREF, backup);
+    if (isEmpty()) {
+      copyFolder(PreferenceFileLocale.BASE_PREF, backup);
+    }
+  }
+
+  private boolean isEmpty() throws IOException {
+    try (DirectoryStream<Path> dirStream = Files.newDirectoryStream(backup)) {
+      return !dirStream.iterator().hasNext();
+    }
   }
 
   public void copyFolder(final Path src, final Path dest) throws IOException {
