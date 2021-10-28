@@ -1,6 +1,7 @@
-package io.github.pulsebeat02.cchsunblocker.plist.safety;
+package io.github.pulsebeat02.cchsunblocker.backup;
 
-import io.github.pulsebeat02.cchsunblocker.PreferenceFileLocale;
+import io.github.pulsebeat02.cchsunblocker.locale.PathLocale;
+import io.github.pulsebeat02.cchsunblocker.utils.FileUtils;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -13,20 +14,14 @@ public final class BackupTask {
   private final Path backup;
 
   public BackupTask() throws IOException {
-    backup = PreferenceFileLocale.BACKUP_PATH;
-    createFolder();
+    backup = PathLocale.BACKUP_PLIST;
+    FileUtils.createFoldersIfNotExists(backup);
     copyFiles();
-  }
-
-  private void createFolder() throws IOException {
-    if (Files.notExists(backup)) {
-      Files.createDirectories(backup);
-    }
   }
 
   private void copyFiles() throws IOException {
     if (isEmpty()) {
-      copyFolder(PreferenceFileLocale.BASE_PREF, backup);
+      copyFolder(PathLocale.BASE_PREF, backup);
     }
   }
 
@@ -49,5 +44,4 @@ public final class BackupTask {
       throw new RuntimeException(e.getMessage(), e);
     }
   }
-
 }

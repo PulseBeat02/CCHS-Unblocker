@@ -1,7 +1,7 @@
 package io.github.pulsebeat02.cchsunblocker.plist.implementation;
 
 import com.dd.plist.PropertyListFormatException;
-import io.github.pulsebeat02.cchsunblocker.PreferenceFileLocale;
+import io.github.pulsebeat02.cchsunblocker.locale.PathLocale;
 import io.github.pulsebeat02.cchsunblocker.plist.PList;
 import java.io.IOException;
 import java.text.ParseException;
@@ -10,9 +10,21 @@ import org.xml.sax.SAXException;
 
 public final class GamePreferences extends PList {
 
+  private static final String PAYLOAD_UUID;
+  private static final String CREATION_DATE;
+  private static final String REST_API_TOKEN;
+  private static final String REST_API_URL;
+
+  static {
+    PAYLOAD_UUID = "PayloadUUID";
+    CREATION_DATE = "creation_date";
+    REST_API_TOKEN = "rest_api_token";
+    REST_API_URL = "rest_api_url";
+  }
+
   public GamePreferences()
       throws PropertyListFormatException, IOException, ParseException, ParserConfigurationException, SAXException {
-    super(PreferenceFileLocale.GAMES);
+    super(PathLocale.GAMES);
   }
 
   public void setPayloadUUID(final String payloadUUID) {

@@ -10,40 +10,52 @@ import org.xml.sax.SAXException;
 
 public class AppPreferences extends PList {
 
+  private static final String PAYLOAD_UUID;
+  private static final String HASH;
+  private static final String CONFIGURATION;
+  private static final String CREATION_DATE;
+
+  static {
+    PAYLOAD_UUID = "PayloadUUID";
+    HASH = "Hash";
+    CONFIGURATION = "Configuration";
+    CREATION_DATE = "CreationDate";
+  }
+
   public AppPreferences(final Path path)
       throws PropertyListFormatException, IOException, ParseException, ParserConfigurationException, SAXException {
     super(path);
   }
 
   public void setPayloadUUID(final String payloadUUID) {
-    getDictionary().put("PayloadUUID", payloadUUID);
+    getDictionary().put(PAYLOAD_UUID, payloadUUID);
   }
 
   public String getPayloadUUID() {
-    return getDictionary().get("PayloadUUID").toJavaObject(String.class);
+    return getDictionary().get(PAYLOAD_UUID).toJavaObject(String.class);
   }
 
   public void setHash(final String hash) {
-    getDictionary().put("Hash", hash);
+    getDictionary().put(HASH, hash);
   }
 
   public String getHash() {
-    return getDictionary().get("Hash").toJavaObject(String.class);
+    return getDictionary().get(HASH).toJavaObject(String.class);
   }
 
   public void setAppConfiguration(final String configuration) {
-    getDictionary().put("Configuration", configuration);
+    getDictionary().put(CONFIGURATION, configuration);
   }
 
   public String getAppConfiguration() {
-    return getDictionary().get("Configuration").toJavaObject(String.class);
+    return getDictionary().get(CONFIGURATION).toJavaObject(String.class);
   }
 
   public void setCreationDate(final long epoch) {
-    getDictionary().put("CreationDate", epoch);
+    getDictionary().put(CREATION_DATE, epoch);
   }
 
   public long getCreationDate() {
-    return Long.parseLong(getDictionary().get("CreationDate").toJavaObject(String.class));
+    return Long.parseLong(getDictionary().get(CREATION_DATE).toJavaObject(String.class));
   }
 }
