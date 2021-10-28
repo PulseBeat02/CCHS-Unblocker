@@ -11,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.text.ParseException;
+import java.util.concurrent.TimeUnit;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
@@ -56,9 +57,13 @@ public class PList implements PListHolder {
   public void save(final String passcode) {
     try {
       changePermissions(passcode, file.toString());
+      delay(); // ensure that previous task has completed
       createContents(passcode, true);
+      delay();
       createTempFile(dictionary.toXMLPropertyList());
+      delay();
       modifyFile(passcode);
+      delay();
       createContents(passcode, false);
     } catch (IOException | InterruptedException e) {
       e.printStackTrace();
@@ -67,7 +72,7 @@ public class PList implements PListHolder {
 
   private void createTempFile(final String xml) throws IOException {
     FileUtils.createFileIfNotExists(temp);
-    Files.writeString(temp, xml, StandardOpenOption.TRUNCATE_EXISTING);
+    Files.writeString(temp, xml);
   }
 
   private void createContents(final String passcode, final boolean xml)
@@ -101,5 +106,9 @@ public class PList implements PListHolder {
 
   private void createScript(final String cmd) throws IOException {
     FileUtils.createFileWithContents(script, cmd);
+  }
+
+  private void delay() throws InterruptedException {
+    TimeUnit.MILLISECONDS.sleep(500L);
   }
 }
