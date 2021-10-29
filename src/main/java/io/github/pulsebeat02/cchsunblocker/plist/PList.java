@@ -9,7 +9,6 @@ import io.github.pulsebeat02.cchsunblocker.utils.NativeUtils;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.text.ParseException;
 import java.util.concurrent.TimeUnit;
 import javax.xml.parsers.ParserConfigurationException;
@@ -30,8 +29,9 @@ public class PList implements PListHolder {
   private final Path script;
   private final NSDictionary dictionary;
   private final String sudo;
+  private final String console;
 
-  public PList(final Path file)
+  public PList(final Path file, final String console)
       throws PropertyListFormatException, IOException, ParseException, ParserConfigurationException, SAXException {
     this.file = file.toAbsolutePath();
     this.dictionary = (NSDictionary) PropertyListParser.parse(file.toFile());
@@ -41,6 +41,7 @@ public class PList implements PListHolder {
     final String name = FileUtils.getFileNameWithoutExtension(file);
     this.temp = folder.resolve("%s.plist".formatted(name));
     this.script = folder.resolve("%s.sh".formatted(name));
+    this.console = console;
   }
 
   @Override
@@ -68,6 +69,12 @@ public class PList implements PListHolder {
     } catch (IOException | InterruptedException e) {
       e.printStackTrace();
     }
+    System.out.println(console);
+  }
+
+  @Override
+  public String getFinishedConsoleMessage() {
+    return console;
   }
 
   private void createTempFile(final String xml) throws IOException {

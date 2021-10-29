@@ -18,4 +18,10 @@ public interface PathLocale {
   Path GAME_TREATMENT = BASE_PREF.resolve("com.mosyle.macos.applist.11.plist");
   Path GAMES = BASE_PREF.resolve("com.mosyle.macos.config.plist");
   Path VPN_TREATMENT = BASE_PREF.resolve("com.mosyle.macos.applist.10.plist");
+
+  Path MOSYLE_AUTH = BASE_PREF.resolve("com.mosyle.macos.auth.plist");
+  Path MOSYLE_CONFIG = BASE_PREF.resolve("com.mosyle.macos.config.plist");
+  Path MOSYLE_CLIENT_CONFIG = BASE_PREF.resolve("com.mosyle.macos.config.client.plist");
+
+
 }

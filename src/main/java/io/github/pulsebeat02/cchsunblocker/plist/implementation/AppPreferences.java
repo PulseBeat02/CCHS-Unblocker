@@ -8,7 +8,7 @@ import java.text.ParseException;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
-public class AppPreferences extends PList {
+public abstract class AppPreferences extends PList {
 
   private static final String PAYLOAD_UUID;
   private static final String HASH;
@@ -22,9 +22,9 @@ public class AppPreferences extends PList {
     CREATION_DATE = "CreationDate";
   }
 
-  public AppPreferences(final Path path)
+  public AppPreferences(final Path path, final String console)
       throws PropertyListFormatException, IOException, ParseException, ParserConfigurationException, SAXException {
-    super(path);
+    super(path, console);
   }
 
   public void setPayloadUUID(final String payloadUUID) {

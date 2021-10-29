@@ -1,6 +1,7 @@
 package io.github.pulsebeat02.cchsunblocker.plist.implementation;
 
 import com.dd.plist.PropertyListFormatException;
+import io.github.pulsebeat02.cchsunblocker.locale.Locale;
 import io.github.pulsebeat02.cchsunblocker.locale.PathLocale;
 import io.github.pulsebeat02.cchsunblocker.plist.PList;
 import java.io.IOException;
@@ -26,7 +27,7 @@ public final class ChromePreferences extends PList {
 
   public ChromePreferences()
       throws PropertyListFormatException, IOException, ParseException, ParserConfigurationException, SAXException {
-    super(PathLocale.CHROME_PREF);
+    super(PathLocale.CHROME_PREF, Locale.FINISHED_CHROME_CONFIG_EDITS);
   }
 
   public void setDefaultBrowserSetting(final boolean value) {

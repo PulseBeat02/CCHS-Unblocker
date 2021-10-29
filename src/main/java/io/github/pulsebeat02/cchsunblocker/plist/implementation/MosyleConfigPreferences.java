@@ -8,10 +8,10 @@ import java.text.ParseException;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
-public final class GamePreferences extends RestApiPreferences {
+public final class MosyleConfigPreferences extends RestApiPreferences {
 
-  public GamePreferences()
+  public MosyleConfigPreferences()
       throws PropertyListFormatException, IOException, ParseException, ParserConfigurationException, SAXException {
-    super(PathLocale.GAMES, Locale.FINISHED_GAME_PREFERENCE_EDITS);
+    super(PathLocale.MOSYLE_CONFIG, Locale.FINISHED_MOSYLE_EDITS);
   }
 }

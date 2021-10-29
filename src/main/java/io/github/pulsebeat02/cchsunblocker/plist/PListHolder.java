@@ -11,4 +11,5 @@ public interface PListHolder {
 
   void save(final String passcode);
 
+  String getFinishedConsoleMessage();
 }

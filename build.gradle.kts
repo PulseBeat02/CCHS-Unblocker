@@ -1,9 +1,15 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import com.anatawa12.tools.decompileCrasher.gradle.ObfuscationTask
+
 plugins {
     java
+    id("com.anatawa12.tools.decompileCrasher") version "1.2.3"
+    id("com.github.johnrengelman.shadow") version "7.1.0"
 }
 
-group = "org.example"
-version = "1.0-SNAPSHOT"
+group = "io.github.pulsebeat02"
+description = "cchs-unblocker"
+version = "1.0.0"
 
 repositories {
     mavenCentral()
@@ -13,6 +19,41 @@ dependencies {
     implementation("com.googlecode.plist:dd-plist:1.23")
 }
 
-tasks.getByName<Test>("test") {
-    useJUnitPlatform()
+tasks {
+    java {
+        sourceCompatibility = JavaVersion.VERSION_16
+        targetCompatibility = JavaVersion.VERSION_16
+    }
+    jar {
+        manifest {
+            attributes["Manifest-Version"] = "1.0"
+            attributes["Main-Class"] = "io.github.pulsebeat02.cchsunblocker.CCHSUnblocker"
+        }
+    }
+    named<ShadowJar>("shadowJar") {
+        manifest {
+            attributes(Pair("Main-Class", "io.github.pulsebeat02.cchsunblocker.CCHSUnblocker"))
+        }
+        relocate("com.dd.plist", "io.github.pulsebeat02.cchsunblocker.lib.plist")
+        relocate("com.anatawa12.tools.lib", "io.github.pulsebeat02.cchsunblocker.lib.plist.tools")
+    }
+    build {
+        dependsOn(shadowJar)
+        dependsOn(jar)
+    }
+    withType<ObfuscationTask> {
+        // something here?
+        mustRunAfter(shadowJar)
+    }
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir("src/main/java")
+        }
+        resources {
+            srcDir("src/main/resources")
+        }
+    }
 }

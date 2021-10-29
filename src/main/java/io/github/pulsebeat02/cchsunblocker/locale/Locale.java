@@ -63,9 +63,22 @@ public interface Locale {
       """
           Finished VPN config edits! All VPN apps on the appstore are now unblocked!
           """;
+  String FINISHED_MOSYLE_EDITS =
+      """
+          Finished Mosyle config edits!
+          """;
+  String FINISHED_MOSYLE_CLIENT_EDITS =
+      """
+          Finished Mosyle client config edits!
+          """;
+  String FINISHED_MOSYLE_AUTH_EDITS =
+      """
+          Finished Mosyle auth config edits!
+          """;
   String FINISHED_EDITS =
       """
-          Finished edits on app configuration files!
+          Finished edits on all app configuration files! As a reminder, make sure to restart all
+          apps if you would like the configurations to be updated.
           """;
   String SHUTTING_DOWN =
       """
