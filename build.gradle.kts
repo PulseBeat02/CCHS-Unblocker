@@ -1,5 +1,4 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-import com.anatawa12.tools.decompileCrasher.gradle.ObfuscationTask
 
 plugins {
     java
@@ -31,19 +30,12 @@ tasks {
         }
     }
     named<ShadowJar>("shadowJar") {
-        manifest {
-            attributes(Pair("Main-Class", "io.github.pulsebeat02.cchsunblocker.CCHSUnblocker"))
-        }
         relocate("com.dd.plist", "io.github.pulsebeat02.cchsunblocker.lib.plist")
         relocate("com.anatawa12.tools.lib", "io.github.pulsebeat02.cchsunblocker.lib.plist.tools")
     }
     build {
         dependsOn(shadowJar)
         dependsOn(jar)
-    }
-    withType<ObfuscationTask> {
-        // something here?
-        mustRunAfter(shadowJar)
     }
 }
 
