@@ -1,7 +1,7 @@
 package io.github.pulsebeat02.cchsunblocker;
 
 import com.dd.plist.PropertyListFormatException;
-import io.github.pulsebeat02.cchsunblocker.plist.implementation.ChromePreferences;
+import io.github.pulsebeat02.cchsunblocker.plist.implementation.application.ChromePreferences;
 import io.github.pulsebeat02.cchsunblocker.backup.BackupTask;
 import java.io.IOException;
 import java.text.ParseException;

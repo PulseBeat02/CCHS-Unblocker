@@ -12,21 +12,27 @@ import java.util.stream.Stream;
 public final class BackupTask {
 
   private final Path backup;
+  private final Path launchAgents;
 
   public BackupTask() throws IOException {
     backup = PathLocale.BACKUP_PLIST;
+    launchAgents = backup.resolve("LaunchAgents");
     FileUtils.createFoldersIfNotExists(backup);
+    FileUtils.createFoldersIfNotExists(launchAgents);
     copyFiles();
   }
 
   private void copyFiles() throws IOException {
-    if (isEmpty()) {
+    if (isEmpty(backup)) {
       copyFolder(PathLocale.BASE_PREF, backup);
+    }
+    if (isEmpty(launchAgents)) {
+      copyFolder(PathLocale.LAUNCH_AGENTS, launchAgents);
     }
   }
 
-  private boolean isEmpty() throws IOException {
-    try (DirectoryStream<Path> dirStream = Files.newDirectoryStream(backup)) {
+  private boolean isEmpty(final Path dir) throws IOException {
+    try (DirectoryStream<Path> dirStream = Files.newDirectoryStream(dir)) {
       return !dirStream.iterator().hasNext();
     }
   }

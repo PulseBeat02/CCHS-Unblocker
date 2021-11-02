@@ -1,14 +1,8 @@
-package io.github.pulsebeat02.cchsunblocker.plist.implementation;
+package io.github.pulsebeat02.cchsunblocker.plist.implementation.mosyle;
 
-import com.dd.plist.PropertyListFormatException;
 import io.github.pulsebeat02.cchsunblocker.locale.Locale;
 import io.github.pulsebeat02.cchsunblocker.locale.PathLocale;
 import io.github.pulsebeat02.cchsunblocker.plist.PList;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.text.ParseException;
-import javax.xml.parsers.ParserConfigurationException;
-import org.xml.sax.SAXException;
 
 public final class MosyleClientConfigPreferences extends PList {
 
@@ -24,8 +18,7 @@ public final class MosyleClientConfigPreferences extends PList {
     PAYLOAD_UUID = "PayloadUUID";
   }
 
-  public MosyleClientConfigPreferences()
-      throws PropertyListFormatException, IOException, ParseException, ParserConfigurationException, SAXException {
+  public MosyleClientConfigPreferences() {
     super(PathLocale.MOSYLE_CLIENT_CONFIG, Locale.FINISHED_MOSYLE_CLIENT_EDITS);
   }
 

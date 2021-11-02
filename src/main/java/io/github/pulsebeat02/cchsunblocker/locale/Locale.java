@@ -33,6 +33,18 @@ public interface Locale {
           Please READ carefully above, as it contains important information. Please enter
           "I agree", case-sensitive, if you agree to use the application.
           """;
+  String ENTER_PASSCODE =
+      """
+          Please enter your own password. The password must be correct!
+          """;
+  String VALID_PASSCODE =
+      """
+          Password verified!
+          """;
+  String VERIFY_PASSCODE =
+      """
+          Verify your passcode again before continuing!
+          """;
   String STARTED_BACKUP =
       """
           Starting backup task... a backup of app configurations can be found in the "cchs-unblocker"
@@ -75,6 +87,22 @@ public interface Locale {
       """
           Finished Mosyle auth config edits!
           """;
+  String FINISHED_MOSYLE_AUTH_BOOT_EDITS =
+      """
+          Finished Mosyle boot edits!
+          """;
+  String FINISHED_MOSYLE_MANAGER_NOTIFICATION_EDITS =
+      """
+          Finished Mosyle manager notification edits!
+          """;
+  String FINISHED_MOSYLE_MDM_EDITS =
+      """
+          Finished Mosyle MDM profile edits!
+          """;
+  String FINISHED_MOSYLE_CENTRAL_NOTIFICATION_EDITS =
+      """
+          Finished Mosyle central notification edits!
+          """;
   String FINISHED_EDITS =
       """
           Finished edits on all app configuration files! As a reminder, make sure to restart all
@@ -90,5 +118,15 @@ public interface Locale {
           Invalid arguments! Must provide at least one argument with the current logged-in user
           password for sudo command access!
           """;
+  String ERR_INVALID_PASSCODE = "Invalid passcode! Attempts left: ";
+  String ERR_TOO_MANY_PASSCODE_ATTEMPTS =
+      """
+          Too many passcode attempts! Exiting application!
+          """;
+  String ERR_MISMATCHING_PASSCODES =
+      """
+          The passwords don't match! Shutting down application!
+          """;
   String ERR_SUDOERS_AUDIT = "sudo: error initializing audit plugin sudoers_audit";
+
 }

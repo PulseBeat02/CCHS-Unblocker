@@ -1,18 +1,11 @@
 package io.github.pulsebeat02.cchsunblocker.plist.implementation;
 
-import com.dd.plist.PropertyListFormatException;
-import io.github.pulsebeat02.cchsunblocker.locale.PathLocale;
 import io.github.pulsebeat02.cchsunblocker.plist.PList;
-import java.io.IOException;
 import java.nio.file.Path;
-import java.text.ParseException;
-import javax.xml.parsers.ParserConfigurationException;
-import org.xml.sax.SAXException;
 
 public abstract class RestApiPreferences extends PList {
 
-  public RestApiPreferences(final Path file, final String console)
-      throws PropertyListFormatException, IOException, ParseException, ParserConfigurationException, SAXException {
+  public RestApiPreferences(final Path file, final String console) {
     super(file, console);
   }
 

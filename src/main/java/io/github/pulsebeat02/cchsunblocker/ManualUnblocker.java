@@ -1,32 +1,39 @@
 package io.github.pulsebeat02.cchsunblocker;
 
-import com.dd.plist.PropertyListFormatException;
 import io.github.pulsebeat02.cchsunblocker.plist.PList;
-import io.github.pulsebeat02.cchsunblocker.plist.implementation.ChromePreferences;
-import io.github.pulsebeat02.cchsunblocker.plist.implementation.GamePreferences;
-import io.github.pulsebeat02.cchsunblocker.plist.implementation.GameTreatmentPreferences;
-import io.github.pulsebeat02.cchsunblocker.plist.implementation.MosyleAuthPreferences;
-import io.github.pulsebeat02.cchsunblocker.plist.implementation.MosyleClientConfigPreferences;
-import io.github.pulsebeat02.cchsunblocker.plist.implementation.MosyleConfigPreferences;
-import io.github.pulsebeat02.cchsunblocker.plist.implementation.VPNTreatmentPreferences;
-import java.io.IOException;
-import java.text.ParseException;
+import io.github.pulsebeat02.cchsunblocker.plist.implementation.AppPreferences;
+import io.github.pulsebeat02.cchsunblocker.plist.implementation.RestApiPreferences;
+import io.github.pulsebeat02.cchsunblocker.plist.implementation.application.ChromePreferences;
+import io.github.pulsebeat02.cchsunblocker.plist.implementation.application.GamePreferences;
+import io.github.pulsebeat02.cchsunblocker.plist.implementation.application.GameTreatmentPreferences;
+import io.github.pulsebeat02.cchsunblocker.plist.implementation.application.VPNTreatmentPreferences;
+import io.github.pulsebeat02.cchsunblocker.plist.implementation.mosyle.MosyleAuthPreferences;
+import io.github.pulsebeat02.cchsunblocker.plist.implementation.mosyle.MosyleClientConfigPreferences;
+import io.github.pulsebeat02.cchsunblocker.plist.implementation.mosyle.MosyleConfigPreferences;
+import io.github.pulsebeat02.cchsunblocker.plist.implementation.mosyle.launchagents.AliveAgentPreferences;
+import io.github.pulsebeat02.cchsunblocker.plist.implementation.mosyle.launchagents.LaunchAgentPreferences;
+import io.github.pulsebeat02.cchsunblocker.plist.implementation.mosyle.launchagents.MosyleAuthBootPreferences;
+import io.github.pulsebeat02.cchsunblocker.plist.implementation.mosyle.launchagents.MosyleCenterNotificationPreferences;
+import io.github.pulsebeat02.cchsunblocker.plist.implementation.mosyle.launchagents.MosyleMDMBootPreferences;
+import io.github.pulsebeat02.cchsunblocker.plist.implementation.mosyle.launchagents.MosyleManagerNotificationPreferences;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
-import javax.xml.parsers.ParserConfigurationException;
-import org.xml.sax.SAXException;
+
+import static java.util.stream.Stream.concat;
+import static java.util.stream.Stream.of;
 
 public final class ManualUnblocker {
 
-  public ManualUnblocker(final String passcode)
-      throws PropertyListFormatException, IOException, ParseException, ParserConfigurationException, SAXException {
-    Stream.of(getChromeConfiguration(), getGamePreferences(), getGameTreatmentPreferences(),
-            getVpnTreatmentPreferences(), getMosyleConfigPreferences(),
-            getMosyleClientConfigPreferences(), getMosyleAuthPreferences())
+  public ManualUnblocker(final String passcode) {
+    concat(
+        concat(of(chromePreferences(), mosyleClientPreferences()), restPreferences()),
+        concat(appPreferences(), launchAgentsPreferences()))
         .forEach(configuration -> configuration.save(passcode));
   }
 
-  private PList getChromeConfiguration()
-      throws PropertyListFormatException, IOException, ParseException, ParserConfigurationException, SAXException {
+  private PList chromePreferences() {
     final ChromePreferences preferences = new ChromePreferences();
     preferences.setAllowDinosaurEasterEgg(true);
     preferences.setDefaultBrowserSetting(true);
@@ -36,48 +43,59 @@ public final class ManualUnblocker {
     return preferences;
   }
 
-  private PList getGamePreferences()
-      throws PropertyListFormatException, IOException, ParseException, ParserConfigurationException, SAXException {
-    final GamePreferences preferences = new GamePreferences();
-    preferences.setRestApiUrl("");
-    preferences.setRestApiToken("");
-    return preferences;
-  }
-
-  private PList getGameTreatmentPreferences()
-      throws PropertyListFormatException, IOException, ParseException, ParserConfigurationException, SAXException {
-    final GameTreatmentPreferences preferences = new GameTreatmentPreferences();
-    preferences.setAppConfiguration("");
-    return preferences;
-  }
-
-  private PList getVpnTreatmentPreferences()
-      throws PropertyListFormatException, IOException, ParseException, ParserConfigurationException, SAXException {
-    final VPNTreatmentPreferences preferences = new VPNTreatmentPreferences();
-    preferences.setAppConfiguration("");
-    return preferences;
-  }
-
-  private PList getMosyleConfigPreferences()
-      throws PropertyListFormatException, IOException, ParseException, ParserConfigurationException, SAXException {
-    final MosyleConfigPreferences preferences = new MosyleConfigPreferences();
-    preferences.setRestApiUrl("");
-    preferences.setRestApiToken("");
-    return preferences;
-  }
-
-  private PList getMosyleClientConfigPreferences()
-      throws PropertyListFormatException, IOException, ParseException, ParserConfigurationException, SAXException {
+  private PList mosyleClientPreferences() {
     final MosyleClientConfigPreferences preferences = new MosyleClientConfigPreferences();
     preferences.setClientDomain("");
     preferences.setClientConfigurationKey("");
     return preferences;
   }
 
-  private PList getMosyleAuthPreferences()
-      throws PropertyListFormatException, IOException, ParseException, ParserConfigurationException, SAXException {
-    final MosyleAuthPreferences preferences = new MosyleAuthPreferences();
-    preferences.setAppConfiguration("");
-    return preferences;
+  private Stream<PList> restPreferences() {
+    final Supplier<Stream<RestApiPreferences>> plist = () -> of(
+        new MosyleConfigPreferences(),
+        new GamePreferences()
+    );
+    plist.get().filter(preference -> preference.getDictionary() != null).forEach(preference -> {
+      preference.setRestApiUrl("");
+      preference.setRestApiToken("");
+    });
+    return plist.get().map(preference -> preference);
+  }
+
+  private Stream<PList> appPreferences() {
+    final Supplier<Stream<AppPreferences>> plist = () -> of(
+        new MosyleAuthPreferences(),
+        new VPNTreatmentPreferences(),
+        new GameTreatmentPreferences()
+    );
+    plist.get().filter(preference -> preference.getDictionary() != null)
+        .forEach(preference -> preference.setAppConfiguration(""));
+    return plist.get().map(preference -> preference);
+  }
+
+  private Stream<PList> launchAgentsPreferences() {
+    return concat(modifyNormalAgents(), modifyAliveAgents());
+  }
+
+  private Stream<PList> modifyNormalAgents() {
+    final Supplier<Stream<LaunchAgentPreferences>> plist = () -> of(
+        new MosyleAuthBootPreferences()
+    );
+    plist.get().filter(preference -> preference.getDictionary() != null)
+        .forEach(preferences -> preferences.setRunAtLoad(false));
+    return plist.get().map(preference -> preference);
+  }
+
+  private Stream<PList> modifyAliveAgents() {
+    final Supplier<Stream<AliveAgentPreferences>> plist = () -> of(
+        new MosyleManagerNotificationPreferences(),
+        new MosyleMDMBootPreferences(),
+        new MosyleCenterNotificationPreferences()
+    );
+    plist.get().filter(preference -> preference.getDictionary() != null).forEach(preferences -> {
+      preferences.setRunAtLoad(false);
+      preferences.setKeepAlive(Map.of());
+    });
+    return plist.get().map(preference -> preference);
   }
 }

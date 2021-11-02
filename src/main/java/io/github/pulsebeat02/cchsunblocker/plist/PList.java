@@ -31,17 +31,20 @@ public class PList implements PListHolder {
   private final String sudo;
   private final String console;
 
-  public PList(final Path file, final String console)
-      throws PropertyListFormatException, IOException, ParseException, ParserConfigurationException, SAXException {
-    this.file = file.toAbsolutePath();
-    this.dictionary = (NSDictionary) PropertyListParser.parse(file.toFile());
-    this.sudo = "sudo -S <<< \"%s\"";
-    final Path folder = PathLocale.UNBLOCKER_FOLDER;
-    FileUtils.createFoldersIfNotExists(folder);
-    final String name = FileUtils.getFileNameWithoutExtension(file);
-    this.temp = folder.resolve("%s.plist".formatted(name));
-    this.script = folder.resolve("%s.sh".formatted(name));
-    this.console = console;
+  public PList(final Path file, final String console) {
+    try {
+      this.file = file.toAbsolutePath();
+      this.dictionary = (NSDictionary) PropertyListParser.parse(file.toFile());
+      this.sudo = "sudo -S <<< \"%s\"";
+      final Path folder = PathLocale.UNBLOCKER_FOLDER;
+      FileUtils.createFoldersIfNotExists(folder);
+      final String name = FileUtils.getFileNameWithoutExtension(file);
+      this.temp = folder.resolve("%s.plist".formatted(name));
+      this.script = folder.resolve("%s.sh".formatted(name));
+      this.console = console;
+    } catch (IOException | PropertyListFormatException | ParseException | ParserConfigurationException | SAXException e) {
+      throw new AssertionError("Severe Error! Could not parse plist file!");
+    }
   }
 
   @Override
@@ -56,20 +59,22 @@ public class PList implements PListHolder {
 
   @Override
   public void save(final String passcode) {
-    try {
-      changePermissions(passcode, file.toString());
-      delay(); // ensure that previous task has completed
-      createContents(passcode, true);
-      delay();
-      createTempFile(dictionary.toXMLPropertyList());
-      delay();
-      modifyFile(passcode);
-      delay();
-      createContents(passcode, false);
-    } catch (IOException | InterruptedException e) {
-      e.printStackTrace();
+    if (getDictionary() != null) {
+      try {
+        changePermissions(passcode, file.toString());
+        delay(); // ensure that previous task has completed
+        createContents(passcode, true);
+        delay();
+        createTempFile(dictionary.toXMLPropertyList());
+        delay();
+        modifyFile(passcode);
+        delay();
+        createContents(passcode, false);
+      } catch (IOException | InterruptedException e) {
+        e.printStackTrace();
+      }
+      System.out.println(console);
     }
-    System.out.println(console);
   }
 
   @Override

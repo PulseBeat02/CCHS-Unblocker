@@ -1,13 +1,8 @@
-package io.github.pulsebeat02.cchsunblocker.plist.implementation;
+package io.github.pulsebeat02.cchsunblocker.plist.implementation.application;
 
-import com.dd.plist.PropertyListFormatException;
 import io.github.pulsebeat02.cchsunblocker.locale.Locale;
 import io.github.pulsebeat02.cchsunblocker.locale.PathLocale;
 import io.github.pulsebeat02.cchsunblocker.plist.PList;
-import java.io.IOException;
-import java.text.ParseException;
-import javax.xml.parsers.ParserConfigurationException;
-import org.xml.sax.SAXException;
 
 public final class ChromePreferences extends PList {
 
@@ -25,8 +20,7 @@ public final class ChromePreferences extends PList {
     EXTENSION_INSTALL_FORCELIST = "ExtensionInstallForcelist";
   }
 
-  public ChromePreferences()
-      throws PropertyListFormatException, IOException, ParseException, ParserConfigurationException, SAXException {
+  public ChromePreferences() {
     super(PathLocale.CHROME_PREF, Locale.FINISHED_CHROME_CONFIG_EDITS);
   }
 
